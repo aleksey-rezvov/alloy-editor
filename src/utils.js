@@ -13,17 +13,22 @@ function fitImage(sourceData, fileType) {
 				let width = source.width;
 				let height = source.height;
 
-				if (width > height) {
-					if (width > maxWidth) {
-						height *= maxWidth / width;
-						width = maxWidth;
-					}
-				} else {
-					if (height > maxHeight) {
-						width *= maxHeight / height;
-						height = maxHeight;
-					}
+				const cWidth = width / maxWidth;
+				const cHeight = height / maxHeight;
+
+				if(cWidth <= 1 && cHeight <= 1) {
+					resolved(sourceData);
 				}
+				else {
+					const coeff = (cWidth > cHeight) ? cWidth : cHeight;
+					width = width / coeff;
+					height = height / coeff;
+				}
+
+/*				console.debug(`max: ${maxWidth} x ${maxHeight}`);
+				console.debug(`source: ${source.width} x ${source.height}`);
+				console.debug(`coeff: ${cWidth} x ${cHeight}`);
+				console.debug(`destination: ${width} x ${height}`);*/
 				const canvas = document.createElement("canvas");
 				canvas.width = width;
 				canvas.height = height;
