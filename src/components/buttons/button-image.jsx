@@ -7,6 +7,7 @@ import React from 'react';
 
 import EditorContext from '../../adapter/editor-context';
 import ButtonIcon from './button-icon.jsx';
+import {fitImage} from '../../utils';
 
 /**
  * The ButtonImage class inserts an image to the content.
@@ -105,7 +106,7 @@ class ButtonImage extends React.Component {
 		const reader = new FileReader();
 		const file = inputEl.files[0];
 
-		reader.onload = event => {
+		reader.onload = async event => {
 			const editor = this.context.editor.get('nativeEditor');
 
 			const result = editor.fire('beforeImageAdd', {
@@ -113,20 +114,27 @@ class ButtonImage extends React.Component {
 			});
 
 			if (result) {
-				const el = CKEDITOR.dom.element.createFromHtml(
-					`<img src="${event.target.result}">`
-				);
+				try{
+					const data = await fitImage(event.target.result, file.type);
 
-				editor.insertElement(el);
+					const el = CKEDITOR.dom.element.createFromHtml(
+					`<img src="${data}">`
+					);
 
-				editor.fire('actionPerformed', this);
+					editor.insertElement(el);
 
-				const imageData = {
-					el,
-					file,
-				};
+					editor.fire('actionPerformed', this);
 
-				editor.fire('imageAdd', imageData);
+					const imageData = {
+						el,
+						file,
+					};
+
+					editor.fire('imageAdd', imageData);
+				}
+				catch (e) {
+					console.warn(`Failed to fit image with error`, e);
+				}
 			}
 		};
 

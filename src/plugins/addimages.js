@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+import regeneratorRuntime from "regenerator-runtime";
+import {fitImage} from '../utils';
+
 const isIE = CKEDITOR.env.ie;
 
 if (!CKEDITOR.plugins.get('ae_addimages')) {
@@ -252,30 +255,36 @@ if (!CKEDITOR.plugins.get('ae_addimages')) {
 		_processFile(file, editor) {
 			const reader = new FileReader();
 
-			reader.addEventListener('loadend', (e) => {
-				_fitImage(e.target.result, file.type,
-					editor.config.fitImageMaxWidth, editor.config.fitImageMaxHeight)
-					.then( (data) => {
-						const el = CKEDITOR.dom.element.createFromHtml(
-							'<img src="' + data + '">'
-						);
-
-						editor.insertElement(el);
-
-						const imageData = {
-							el,
-							file,
-						};
-
-						editor.fire('imageAdd', imageData);
-						}
+			reader.addEventListener('loadend', async (e) => {
+				try{
+					const data = await fitImage(e.target.result, file.type);
+					// editor.config.fitImageMaxWidth, editor.config.fitImageMaxHeight)
+					// .then( (data) => {
+					const el = CKEDITOR.dom.element.createFromHtml(
+						'<img src="' + data + '">'
 					);
+
+					editor.insertElement(el);
+
+					const imageData = {
+						el,
+						file,
+					};
+
+					editor.fire('imageAdd', imageData);
+					// }
+					// );
+				}
+				catch (e) {
+					console.warn(`Failed to fit image with error`, e);
+				}
 			});
 
 			reader.readAsDataURL(file);
 		},
 	});
 }
+/*
 
 function _fitImage(sourceData, fileType, maxWidth, maxHeight) {
 	return new Promise ((resolved, _) => {
@@ -312,3 +321,4 @@ function _fitImage(sourceData, fileType, maxWidth, maxHeight) {
 		}
 	})
 }
+*/
