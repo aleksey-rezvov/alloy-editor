@@ -45,6 +45,9 @@ if (!CKEDITOR.plugins.get('ae_addimages')) {
 		 * @param {Object} editor The current editor instance
 		 */
 		init(editor) {
+			this.fitImageMaxWidth = editor.config.fitImageMaxWidth;
+			this.fitImageMaxHeight = editor.config.fitImageMaxHeight;
+
 			editor.once('contentDom', () => {
 				const editable = editor.editable();
 
@@ -249,24 +252,63 @@ if (!CKEDITOR.plugins.get('ae_addimages')) {
 		_processFile(file, editor) {
 			const reader = new FileReader();
 
-			reader.addEventListener('loadend', () => {
-				const bin = reader.result;
+			reader.addEventListener('loadend', (e) => {
+				_fitImage(e.target.result, file.type,
+					editor.config.fitImageMaxWidth, editor.config.fitImageMaxHeight)
+					.then( (data) => {
+						const el = CKEDITOR.dom.element.createFromHtml(
+							'<img src="' + data + '">'
+						);
 
-				const el = CKEDITOR.dom.element.createFromHtml(
-					'<img src="' + bin + '">'
-				);
+						editor.insertElement(el);
 
-				editor.insertElement(el);
+						const imageData = {
+							el,
+							file,
+						};
 
-				const imageData = {
-					el,
-					file,
-				};
-
-				editor.fire('imageAdd', imageData);
+						editor.fire('imageAdd', imageData);
+						}
+					);
 			});
 
 			reader.readAsDataURL(file);
 		},
 	});
+}
+
+function _fitImage(sourceData, fileType, maxWidth, maxHeight) {
+	return new Promise ((resolved, _) => {
+		if(!maxWidth || !maxHeight) {
+			resolved(sourceData);
+		}
+		else {
+			const source = new Image();
+			source.onload = () => {
+				let width = source.width;
+				let height = source.height;
+
+				if (width > height) {
+					if (width > maxWidth) {
+						height *= maxWidth / width;
+						width = maxWidth;
+					}
+				} else {
+					if (height > maxHeight) {
+						width *= maxHeight / height;
+						height = maxHeight;
+					}
+				}
+				const canvas = document.createElement("canvas");
+				canvas.width = width;
+				canvas.height = height;
+				const context = canvas.getContext("2d");
+				context.drawImage(source, 0, 0, width, height);
+
+				const dataurl = canvas.toDataURL(fileType);
+				resolved(dataurl);
+			};
+			source.src = sourceData;
+		}
+	})
 }
