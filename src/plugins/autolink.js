@@ -121,7 +121,12 @@ if (!CKEDITOR.plugins.get('ae_autolink')) {
 		 * @return {String} The last word introduced by user
 		 */
 		_getLastWord(editor) {
+			const selection = editor.getSelection();
+			const range = selection ? selection.getRanges()[0] : null;
+/*
+
 			const range = editor.getSelection().getRanges()[0];
+*/
 
 			if (!range) {
 				return;
@@ -296,8 +301,12 @@ if (!CKEDITOR.plugins.get('ae_autolink')) {
 
 			// Now range is on the link and it is selected. We have to
 			// return focus to the caret position.
-			range = editor.getSelection().getRanges()[0];
-
+			/*range = editor.getSelection().getRanges()[0];*/
+			const selection = editor.getSelection();
+			range = selection ? selection.getRanges()[0] : null;
+			if(!range) {
+				return null;
+			}
 			// If user pressed `Enter`, get the next editable node at position 0,
 			// otherwise set the cursor at the next character of the link (the white space)
 			if (this._currentKeyCode === KEY_ENTER) {
@@ -332,7 +341,12 @@ if (!CKEDITOR.plugins.get('ae_autolink')) {
 		 * @protected
 		 */
 		_removeLink(editor) {
-			const range = editor.getSelection().getRanges()[0];
+			const selection = editor.getSelection();
+			const range = selection ? selection.getRanges()[0] : null;
+			if(!range) {
+				return null;
+			}
+			/*const range = editor.getSelection().getRanges()[0];*/
 			const caretOffset = range.startOffset;
 
 			// Select the link, so CKEDITOR.Link can properly remove it

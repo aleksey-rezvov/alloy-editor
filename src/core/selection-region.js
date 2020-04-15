@@ -222,7 +222,7 @@ if (!CKEDITOR.plugins.get('ae_selectionregion')) {
 				return true;
 			}
 
-			const ranges = selection.getRanges();
+			const ranges = selection ? selection.getRanges() : null;
 			return ranges && ranges.length === 1 && ranges[0].collapsed;
 		},
 

@@ -61,7 +61,13 @@ const headingTextSelectionTest = function(payload) {
 
 const linkSelectionTest = function(payload) {
 	const nativeEditor = payload.editor.get('nativeEditor');
-	const range = nativeEditor.getSelection().getRanges()[0];
+	const selection = nativeEditor.getSelection();
+	const range = selection ? selection.getRanges()[0] : null;
+	if(!range) {
+		return null;
+	}
+
+	/*const range = nativeEditor.getSelection().getRanges()[0];*/
 	const selectionData = payload.data.selectionData;
 
 	const element = new CKEDITOR.Link(nativeEditor).getFromSelection();

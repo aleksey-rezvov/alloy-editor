@@ -94,9 +94,13 @@ Table.prototype = {
 		if (selected && selected.is('table')) {
 			table = selected;
 		} else {
-			const ranges = selection.getRanges();
+			const ranges = selection ? selection.getRanges() : null;
+/*
 
-			if (ranges.length > 0) {
+			const ranges = selection.getRanges();
+*/
+
+			if (ranges && ranges.length > 0) {
 				// Webkit could report the following range on cell selection (#4948):
 				// <table><tr><td>[&nbsp;</td></tr></table>]
 

@@ -12,6 +12,9 @@ if (!CKEDITOR.plugins.get('ae_tabletools')) {
 	const cellNodeRegex = /^(?:td|th)$/;
 
 	function getSelectedCells(selection) {
+		if(!selection) {
+			return null;
+		}
 		const ranges = selection.getRanges();
 		const retval = [];
 		const database = {};

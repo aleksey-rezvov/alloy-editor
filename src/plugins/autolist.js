@@ -89,7 +89,12 @@ if (!CKEDITOR.plugins.get('ae_autolist')) {
 		_getListConfig(editor) {
 			const configRegex = editor.config.autolist || DEFAULT_CONFIG;
 
-			const range = editor.getSelection().getRanges()[0];
+			/*const range = editor.getSelection().getRanges()[0];*/
+			const selection = editor.getSelection();
+			const range = selection ? selection.getRanges()[0] : null;
+			if(!range) {
+				return null;
+			}
 
 			const textContainer = range.endContainer.getText();
 
@@ -138,7 +143,12 @@ if (!CKEDITOR.plugins.get('ae_autolist')) {
 		_createList(listConfig) {
 			const editor = listConfig.editor;
 
-			const range = editor.getSelection().getRanges()[0];
+			const selection = editor.getSelection();
+			const range = selection ? selection.getRanges()[0] : null;
+			if(!range) {
+				return null;
+			}
+			/*const range = editor.getSelection().getRanges()[0];*/
 
 			range.endContainer.setText(listConfig.text);
 			editor.execCommand(listConfig.type);

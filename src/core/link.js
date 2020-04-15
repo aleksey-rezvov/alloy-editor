@@ -35,9 +35,16 @@ Link.prototype = {
 	advanceSelection(link) {
 		link = link || this.getFromSelection();
 
-		const range = this._editor.getSelection().getRanges()[0];
+		const selection = this._editor.getSelection();
+		const range = selection ? selection.getRanges()[0] : null;
+
+		if (link && range) {
+/*
+
+			const range = this._editor.getSelection().getRanges()[0];
 
 		if (link) {
+*/
 			range.moveToElementEditEnd(link);
 
 			const nextNode = range.getNextEditableNode();
@@ -71,9 +78,14 @@ Link.prototype = {
 	create(URI, attrs, modifySelection) {
 		const selection = this._editor.getSelection();
 
+/*
 		const range = selection.getRanges()[0];
 
 		if (range.collapsed) {
+*/
+		const range = selection ? selection.getRanges()[0] : null;
+
+		if (range && range.collapsed) {
 			const text = new CKEDITOR.dom.text(URI, this._editor.document);
 			range.insertNode(text);
 			range.selectNodeContents(text);
@@ -134,8 +146,11 @@ Link.prototype = {
 				}
 			}
 		}
+/*
 
 		const range = selection.getRanges()[0];
+*/
+		const range = selection ? selection.getRanges()[0] : null;
 
 		if (range) {
 			range.shrink(CKEDITOR.SHRINK_TEXT);
