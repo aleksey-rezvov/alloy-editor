@@ -159,6 +159,9 @@ extend(
 				this._clearSelections();
 
 				nativeEditor.destroy();
+				for(const inst in CKEDITOR.instances) {
+					inst.destroy();
+				};
 			}
 		},
 
@@ -547,7 +550,7 @@ extend(
 				value:
 					'ae_uicore,ae_selectionregion,ae_selectionkeystrokes,ae_imagealignment,ae_addimages,ae_placeholder,' +
 					'ae_tabletools,ae_tableresize,ae_autolink,ae_embed,ae_autolist,ae_dragresize,' +
-					'ae_uibridge,ae_richcombobridge,ae_panelmenubuttonbridge,ae_menubridge,ae_menubuttonbridge,ae_buttonbridge,font,colorbutton',
+					'ae_uibridge,ae_richcombobridge,ae_panelmenubuttonbridge,ae_menubridge,ae_menubuttonbridge,ae_buttonbridge,font,colorbutton,smiley',
 				writeOnce: true,
 			},
 
