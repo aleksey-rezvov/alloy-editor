@@ -20,6 +20,7 @@ import ButtonEmbed from './button-embed.jsx';
 import ButtonH1 from './button-h1.jsx';
 import ButtonH2 from './button-h2.jsx';
 import ButtonHline from './button-hline.jsx';
+import ButtonSmiley from './button-smiley.jsx';
 import ButtonImageAlignCenter from './button-image-align-center.jsx';
 import ButtonImageAlignLeft from './button-image-align-left.jsx';
 import ButtonImageAlignRight from './button-image-align-right.jsx';
@@ -85,6 +86,7 @@ export default {
 	[ButtonH1.key]: ButtonH1,
 	[ButtonH2.key]: ButtonH2,
 	[ButtonHline.key]: ButtonHline,
+	[ButtonSmiley.key]: ButtonSmiley,
 	[ButtonImageAlignCenter.key]: ButtonImageAlignCenter,
 	[ButtonImageAlignLeft.key]: ButtonImageAlignLeft,
 	[ButtonImageAlignRight.key]: ButtonImageAlignRight,

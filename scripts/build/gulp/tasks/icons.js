@@ -3,15 +3,21 @@ const gulp = require('gulp');
 const path = require('path');
 
 gulp.task('icons:copy', function copyIcons() {
-	const iconsPath = path.join(
-		Constants.rootDir,
-		'node_modules',
-		'clay-css',
-		'lib',
-		'images',
-		'icons',
-		'icons.svg'
-	);
+	const iconsPath = [
+		path.join(
+			Constants.rootDir,
+			'node_modules',
+			'clay-css',
+			'lib',
+			'images',
+			'icons',
+			'icons.svg'
+		),
+		path.join(Constants.assetsDir,
+			'icons',
+			'custom',
+			'*.svg')
+		];
 
 	return gulp
 		.src(iconsPath)

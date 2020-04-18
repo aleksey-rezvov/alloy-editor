@@ -695,6 +695,7 @@ extend(
 							'camera',
 							'hline',
 							'table',
+							'smiley',
 						],
 						tabIndex: 2,
 					},
