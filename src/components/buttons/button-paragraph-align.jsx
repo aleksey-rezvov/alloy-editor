@@ -51,7 +51,8 @@ class ButtonParagraphAlign extends React.Component {
 
 				return command ? command.state === CKEDITOR.TRISTATE_ON : false;
 			})
-			.pop();
+			.pop()
+			|| this._getCommands()[0];
 
 		const iconClassName = activeCommand.icon;
 
