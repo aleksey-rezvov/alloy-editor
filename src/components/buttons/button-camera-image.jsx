@@ -6,6 +6,7 @@
 import React from 'react';
 
 import EditorContext from '../../adapter/editor-context';
+import {fitImage} from '../../utils';
 
 /**
  * The ButtonCameraImage class takes photo from camera and inserts it to the content.
@@ -127,7 +128,7 @@ class ButtonCameraImage extends React.Component {
 	 * @memberof ButtonCameraImage
 	 * @method takePhoto
 	 */
-	takePhoto = () => {
+	takePhoto = async () => {
 		const videoEl = this._videoContainerRef.current;
 		const canvasEl = this._canvasContainerRef.current;
 
@@ -142,10 +143,13 @@ class ButtonCameraImage extends React.Component {
 
 			context.drawImage(videoEl, 0, 0, width, height);
 
-			const imgURL = canvasEl.toDataURL('image/png');
+			const fileType = 'image/jpeg';
+			const imgURL = canvasEl.toDataURL(fileType);
+
+			const data = await fitImage(imgURL, fileType);
 
 			const el = CKEDITOR.dom.element.createFromHtml(
-				'<img src="' + imgURL + '">'
+				'<img src="' + data + '">'
 			);
 
 			const editor = this.context.editor.get('nativeEditor');
